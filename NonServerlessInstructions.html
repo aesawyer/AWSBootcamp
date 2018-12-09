@@ -7,10 +7,10 @@
                 background-repeat: no-repeat;
                 background-attachment: fixed;
                 background-size: cover;
-                }
+            }
             .box {
                 border: 15px solid #0F8299;
-                background-color: lightgray;
+                background-color: white;
                 width: 50%;
                 border-radius: 25px;
                 margin-top: 25px;
@@ -20,23 +20,59 @@
                 font-size: large;
             }
             .cli {
-                background-color: darkgray;
-                width: 75%;
-                margin-left: auto;
-                margin-right: auto;
+                background-color: #63666A;
+                width: 80%;
+                border-radius: 5px;
+
                 padding: 15px;
                 font-family: monospace;
+                font-weight: bold;
+                color: white;
+            }
+            .ohigh {
+                color: #F68D2E;
+                font-weight: bold;
             }
         </style>
     </head>
     <body>
+        <a name='top'></a>
         <div class="box">
-            <h2>AWS Infrastructure CLI Instructions:</h2>
-            <a href="index.html">Return Home</a><br>
-            <p>First do this:</p>
-            <div class="cli">
-                <p>test</p>
-            </div>
+            <h2><center>AWS Infrastructure<br>CLI Instructions:</center></h2>
+            <center><a href="index.html">Return Home</a></center>
+            <p>In this lab we will be putting the finishing touches on our infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, EC2 instance, and S3 bucket.<br><br> This information will then be saved to an outputlog.txt file saved within the aforementioned S3 bucket.<br><br> We have already created a VPC (ID: <font class="ohigh">vpc-0ad7013d64ade7e5b</font>), a Security Group (ID: <font class="ohigh">sg-0d2334b053de7be66</font>), and a role for our EC2 instance (Name: <font class="ohigh">BootcampEc2Role</font>) but will complete the rest of our resources using the below instructions:</p>
+            <ol>
+                <li>Create your S3 bucket using the name <strong>"[FirstName]-[LabNumber]-clilab-s3"</strong></li><br>
+                <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-15-clilab-s3</box></p></div><br><br>
+                
+                <li>Create a subnet, setting the CIDR block to "172.31.[LabNumber].0/28"</li><br>
+                <div class="cli"><p>aws ec2 create-subnet --vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box> --cidr-block <box class="ohigh">172.31.15.0/28</box></p></div>
+                <p>Copy the <strong>SubnetID</strong> from the return response</p><br>
+                
+                <li>Create a Network ACL</li><br>
+                <div class="cli"><p>aws ec2 create-network-acl --vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box></p></div>
+                <p>Copy the <strong>NetworkAclID</strong> from the return response</p><br>
+                
+                <li>Set rules for your newly created NACL by utilizing the previously captured <strong>NetworkAclID</strong></li><br>
+                <div class="cli"><p>aws ec2 create-network-acl-entry --network-acl-id <box class="ohigh">acl-0123...</box> --ingress --rule-number <box class="ohigh">100</box> --protocol <box class="ohigh">-1</box> --cidr-block <box class="ohigh">0.0.0.0/0</box> --rule-action <box class="ohigh">deny</box></p></div><br><br>
+                
+                <li>Retrieve the Association ID of your newly created subnet</li><br>
+                <div class="cli"><p>aws ec2 describe-network-acls --query 'NetworkAcls[*].Associations[?SubnetID==`<box class="ohigh">subnet-0123...</box>`]'</p></div>
+                <p>Copy the <strong>NetworkAclAssociationID</strong> from the return response</p>
+                <p>Please note: You must surround the value of our query expression with the backtick (<strong>`</strong>) symbol</p><br>
+                
+                <li>Associate your newly created NACL with your newly created subnet</li><br>
+                <div class="cli"><p>aws ec2 replace-network-acl-association --association-id <box class="ohigh">aclassoc-0123...</box> --network-acl-id <box class="ohigh">acl-0123...</box></p></div><br><br>
+                
+                <li>Create your EC2 instance, setting the AMI to <font class="ohigh">ami-01bbe152bf19d0289</font>, the instance type to <font class="ohigh">t2.micro</font>, and upload a bootstrap script</li><br>
+                You can download the bootstrap script <a href="https://s3.amazonaws.com/bootcampclilab/AWSCLI+-+LinuxMac.pdf" target="_blank">here</a><br><br>
+                <div class="cli"><p>aws ec2 run-instances --image-id <box class="ohigh">ami-01bbe152bf19d0289</box> --count <box class="ohigh">1</box> --instance-type <box class="ohigh">t2.micro</box> --iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> --security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> --subnet-id <box class="ohigh">subnet-0123...</box> --user-data <box class="ohigh">BashScript.sh</box></p></div>
+                <p>The script will automatically pull the ARNs for our VPC, subnet, EC2 instance, and S3 bucket</p><br>
+                
+                <li>Open your newly created <font class="ohigh">outputlog.txt</font> file to validate completion</li><br>
+                <div class="cli"><p>aws s3 get-object --bucket <box class="ohigh">s3://adam-15-clilab-s3</box> --key dir/<box class="ohigh">outputlog.txt</box> <box class="ohigh">outputlog.txt</box></p></div><br>
+            </ol>
+            <a href='#top'>Back to Top</a>
         </div>
     </body>
 </html>
