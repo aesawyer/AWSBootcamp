@@ -69,7 +69,7 @@
                 <li>Create your EC2 instance by setting the AMI to <font class="ohigh">ami-01bbe152bf19d0289</font>, the instance type to <font class="ohigh">t2.micro</font>, and uploading a bootstrap script</li><br>
                 You can download the bootstrap script <a href="https://s3.amazonaws.com/bootcampclilab/AWSCLI+-+LinuxMac.pdf" target="_blank">here</a>.<br><br>
                 <div class="cli"><p>aws ec2 run-instances --image-id <box class="ohigh">ami-01bbe152bf19d0289</box> --count <box class="ohigh">1</box> --instance-type <box class="ohigh">t2.micro</box> --iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> --security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> --subnet-id <box class="ohigh">subnet-0123...</box> --user-data <box class="ohigh">[path/to/file]/BashScript.sh</box></p></div>
-                <p>The script will automatically pull the ARNs for our VPC, subnet, and EC2 instance. In addition, the script also changes our NACL rules to deny all traffic.</p><br>
+                <p>The script will automatically pull the ARNs for our VPC, subnet, and EC2 instance. In addition, the script also changes our NACL rules to deny all traffic and output our log file.</p><br>
                 
                 <li>Open your newly created <font class="ohigh">outputlog.txt</font> file to validate completion</li><br>
                 <div class="cli"><p>aws s3 get-object --bucket <box class="ohigh">s3://adam-15-clilab-s3</box> --key <box class="ohigh">dir/outputlog.txt</box> <box class="ohigh">outputlog.txt</box></p></div><br>
