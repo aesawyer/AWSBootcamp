@@ -28,6 +28,7 @@
                 font-family: monospace;
                 font-weight: bold;
                 color: white;
+                word-wrap: break-word;
             }
             .ohigh {
                 color: #F68D2E;
@@ -40,10 +41,22 @@
         <div class="box">
             <h2><center>AWS Serverless Infrastructure<br>CLI Instructions:</center></h2>
             <center><a href="index.html">Return Home</a><br></center>
-            <p>First do this:</p>
-            <div class="cli">
-                <p>test <box class="ohigh">color</box></p>
-            </div><br>
+            <p>In this lab we will be creating a serverless infrastructure. We want to have a Lambda function which grabs the Amazon Resource Number (ARN) for itself.<br><br> This information will then be saved to an <em>outputlog.txt</em> file saved within an S3 bucket.<br><br> We have already created a role for our Lambda function (ARN: <font class="ohigh">arn:aws:iam::918283516283:role/BootcampLambdaRole</font>) and will create the remaining resources using the below instructions:</p>
+            <ol>
+                <li>Create your S3 bucket using the name <strong>"[FirstName]-[LabNumber]-serverless-clilab-s3"</strong></li><br>
+                <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-15-serverless-clilab-s3</box></p></div><br><br>
+                
+                <li>Create your Lambda function by setting the name to <strong>"[FirstName]-[LabNumber]-clilab-lambda"</strong>, the runtime to <font class="ohigh">Python3.7</font>, the environment variables to the names of our S3 bucket and Lambda function, and finally uploading a Python function</li><br>
+                You can download the Python function <a href="https://s3.amazonaws.com/bootcampclilab/AWSCLI+-+LinuxMac.pdf" target="_blank">here</a>.<br><br>
+                <div class="cli"><p>aws lambda create-function --function-name <box class="ohigh">adam-15-clilab-lambda</box> --runtime <box class="ohigh">python3.7</box> --role <box class="ohigh">arn:aws:iam::918283516283:role/BootcampLambdaRole</box> --code <box class="ohigh">[path/to/file]/Bootcampfunction.py</box> --environment Variables={S3_NAME=<box class="ohigh">adam-15-serverless-clilab-s3</box>,Lambda_NAME=<box class="ohigh">adam-15-clilab-lambda</box>}</p></div>
+                <p>The function will automatically pull the ARNs for our Lambda function and S3 bucket.</p><br>
+                
+                <li>Invoke your newly created Lambda function</li><br>
+                <div class="cli"><p>aws lambda invoke --function-name <box class="ohigh">adam-clilab-lambda</box></p></div><br><br>
+                
+                <li>Open your newly created <font class="ohigh">outputlog.txt</font> file to validate completion</li><br>
+                <div class="cli"><p>aws s3 get-object --bucket <box class="ohigh">s3://adam-serverless-clilab-s3</box> --key <box class="ohigh">dir/outputlog.txt</box> <box class="ohigh">outputlog.txt</box></p></div><br>
+            </ol>
             <a href='#top'>Return to Top</a>
         </div>
     </body>
