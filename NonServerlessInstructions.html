@@ -41,7 +41,7 @@
         <div class="box">
             <h2><center>AWS Infrastructure<br>CLI Instructions:</center></h2>
             <center><a href="index.html">Return Home</a></center>
-            <p>In this lab we will be putting the finishing touches on some infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, and EC2 instance.<br><br> This information will then be saved to an <em>outputlog.txt</em> file saved within an S3 bucket.<br><br> We have already created a VPC (ID: <font class="ohigh">vpc-0ad7013d64ade7e5b</font>), a Security Group (ID: <font class="ohigh">sg-0d2334b053de7be66</font>), and a role for our EC2 instance (Name: <font class="ohigh">BootcampEc2Role</font>) but will complete the rest of our resources using the below instructions:</p>
+            <p>In this lab we will be putting the finishing touches on some infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, EC2 instance, and S3 bucket.<br><br> We have already created a VPC (ID: <font class="ohigh">vpc-0ad7013d64ade7e5b</font>), a Security Group (ID: <font class="ohigh">sg-0d2334b053de7be66</font>), and a role for our EC2 instance (Name: <font class="ohigh">BootcampEc2Role</font>) but will complete the rest of our resources using the below instructions:</p>
             <ol>
                 <li>Create your S3 bucket using the name <strong>"[FirstName]-[LabNumber]-clilab-s3"</strong></li><br>
                 <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-15-clilab-s3</box></p></div><br><br>
@@ -66,14 +66,10 @@
                 <li>Associate your newly created NACL with your newly created subnet</li><br>
                 <div class="cli"><p>aws ec2 replace-network-acl-association --association-id <box class="ohigh">aclassoc-0123...</box> --network-acl-id <box class="ohigh">acl-0123...</box></p></div><br><br>
                 
-                <li>Create your EC2 instance by setting the AMI to <font class="ohigh">ami-01bbe152bf19d0289</font>, the instance type to <font class="ohigh">t2.micro</font>, and uploading a bootstrap script</li><br>
-                You can download the bootstrap script <a href="https://s3.amazonaws.com/bootcampclilab/AWSCLI+-+LinuxMac.pdf" target="_blank">here</a>.<br><br>
-                <div class="cli"><p>aws ec2 run-instances --image-id <box class="ohigh">ami-01bbe152bf19d0289</box> --count <box class="ohigh">1</box> --instance-type <box class="ohigh">t2.micro</box> --iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> --security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> --subnet-id <box class="ohigh">subnet-0123...</box> --user-data <box class="ohigh">[path/to/file]/BashScript.sh</box></p></div>
-                <p>The script will automatically pull the ARNs for our VPC, subnet, and EC2 instance. In addition, the script also changes our NACL rules to deny all traffic and output our log file.</p><br>
-                
-                <li>Open your newly created <font class="ohigh">outputlog.txt</font> file to validate completion</li><br>
-                <div class="cli"><p>aws s3 get-object --bucket <box class="ohigh">s3://adam-15-clilab-s3</box> --key <box class="ohigh">dir/outputlog.txt</box> <box class="ohigh">outputlog.txt</box></p></div><br>
+                <li>Create your EC2 instance by setting the AMI to <font class="ohigh">ami-01bbe152bf19d0289</font>, the instance type to <font class="ohigh">t2.micro</font>, and using some previously notated information</li><br>
+                <div class="cli"><p>aws ec2 run-instances --image-id <box class="ohigh">ami-01bbe152bf19d0289</box> --count <box class="ohigh">1</box> --instance-type <box class="ohigh">t2.micro</box> --iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> --security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> --subnet-id <box class="ohigh">subnet-0123...</box></p></div><br>
             </ol>
+            <p>When you have completed these tasks your architecture can be diagrammed as:<br><br><img src="EC2Infrastructure.png"><br><br>Congratulations on completing your lab!</p>
             <a href='#top'>Back to Top</a>
         </div>
     </body>
