@@ -34,6 +34,11 @@
                 color: #F68D2E;
                 font-weight: bold;
             }
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
         </style>
     </head>
     <body>
@@ -47,29 +52,29 @@
                 <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-15-clilab-s3</box></p></div><br><br>
                 
                 <li>Create a subnet, setting the CIDR block to "172.31.[LabNumber].0/28"</li><br>
-                <div class="cli"><p>aws ec2 create-subnet --vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box> --cidr-block <box class="ohigh">172.31.15.0/28</box></p></div>
+                <div class="cli"><p>aws ec2 create-subnet \ <br>&nbsp;--vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box> \ <br>&nbsp;--cidr-block <box class="ohigh">172.31.15.0/28</box></p></div>
                 <p>Copy the <strong>SubnetID</strong> from the return response.</p><br>
                 
                 <li>Create a Network ACL</li><br>
-                <div class="cli"><p>aws ec2 create-network-acl --vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box></p></div>
+                <div class="cli"><p>aws ec2 create-network-acl \ <br>&nbsp;--vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box></p></div>
                 <p>Copy the <strong>NetworkAclID</strong> from the return response.</p><br>
                 
-                <li>Permit ingress & egress traffic for your newly created NACL by utilizing the previously captured <strong>NetworkAclID</strong></li><br>
-                <div class="cli"><p>aws ec2 create-network-acl-entry --network-acl-id <box class="ohigh">acl-0123...</box> --ingress --rule-number <box class="ohigh">100</box> --protocol <box class="ohigh">-1</box> --cidr-block <box class="ohigh">0.0.0.0/0</box> --rule-action <box class="ohigh">allow</box></p></div><br>
-                <div class="cli"><p>aws ec2 create-network-acl-entry --network-acl-id <box class="ohigh">acl-0123...</box> --egress --rule-number <box class="ohigh">100</box> --protocol <box class="ohigh">-1</box> --cidr-block <box class="ohigh">0.0.0.0/0</box> --rule-action <box class="ohigh">allow</box></p></div><br><br>
+                <li>Block inbound & outbound traffic for your newly created NACL by utilizing the previously captured <strong>NetworkAclID</strong></li><br>
+                <div class="cli"><p>aws ec2 create-network-acl-entry \ <br>&nbsp;--network-acl-id <box class="ohigh">acl-0123...</box> \ <br>&nbsp;--ingress \ <br>&nbsp;--rule-number <box class="ohigh">100</box> \ <br>&nbsp;--protocol <box class="ohigh">-1</box> \ <br>&nbsp;--cidr-block <box class="ohigh">0.0.0.0/0</box> \ <br>&nbsp;--rule-action <box class="ohigh">deny</box></p></div><br>
+                <div class="cli"><p>aws ec2 create-network-acl-entry \ <br>&nbsp;--network-acl-id <box class="ohigh">acl-0123...</box> \ <br>&nbsp;--egress \ <br>&nbsp;--rule-number <box class="ohigh">100</box> \ <br>&nbsp;--protocol <box class="ohigh">-1</box> \ <br>&nbsp;--cidr-block <box class="ohigh">0.0.0.0/0</box> \ <br>&nbsp;--rule-action <box class="ohigh">deny</box></p></div><br><br>
                 
                 <li>Retrieve the Association ID of your newly created subnet</li><br>
-                <div class="cli"><p>aws ec2 describe-network-acls --query 'NetworkAcls[*].Associations[?SubnetID==`<box class="ohigh">subnet-0123...</box>`]'</p></div>
+                <div class="cli"><p>aws ec2 describe-network-acls \ <br>&nbsp;--query 'NetworkAcls[*].Associations[?SubnetID==`<box class="ohigh">subnet-0123...</box>`]'</p></div>
                 <p>Copy the <strong>NetworkAclAssociationID</strong> from the return response.</p>
                 <p>Please note: You must surround the value of our query expression with the backtick (<strong>`</strong>) symbol.</p><br>
                 
                 <li>Associate your newly created NACL with your newly created subnet</li><br>
-                <div class="cli"><p>aws ec2 replace-network-acl-association --association-id <box class="ohigh">aclassoc-0123...</box> --network-acl-id <box class="ohigh">acl-0123...</box></p></div><br><br>
+                <div class="cli"><p>aws ec2 replace-network-acl-association \ <br>&nbsp;--association-id <box class="ohigh">aclassoc-0123...</box> \ <br>&nbsp;--network-acl-id <box class="ohigh">acl-0123...</box></p></div><br><br>
                 
                 <li>Create your EC2 instance by setting the AMI to <font class="ohigh">ami-01bbe152bf19d0289</font>, the instance type to <font class="ohigh">t2.micro</font>, and using some previously notated information</li><br>
-                <div class="cli"><p>aws ec2 run-instances --image-id <box class="ohigh">ami-01bbe152bf19d0289</box> --count <box class="ohigh">1</box> --instance-type <box class="ohigh">t2.micro</box> --iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> --security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> --subnet-id <box class="ohigh">subnet-0123...</box></p></div><br>
+                <div class="cli"><p>aws ec2 run-instances \ <br>&nbsp;--image-id <box class="ohigh">ami-01bbe152bf19d0289</box> \ <br>&nbsp;--count <box class="ohigh">1</box> \ <br>&nbsp;--instance-type <box class="ohigh">t2.micro</box> \ <br>&nbsp;--iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> \ <br>&nbsp;--security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> \ <br>&nbsp;--subnet-id <box class="ohigh">subnet-0123...</box></p></div><br>
             </ol>
-            <p>When you have completed these tasks your architecture can be diagrammed as:<br><br><img src="EC2Infrastructure.png"><br><br>Congratulations on completing your lab!</p>
+            <p>When you have completed these tasks your architecture can be diagrammed as:<br><br><img src="EC2Infrastructure.png" class="center"><br><br>Congratulations on completing your lab!</p>
             <a href='#top'>Back to Top</a>
         </div>
     </body>
