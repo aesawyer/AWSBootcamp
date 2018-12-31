@@ -46,7 +46,7 @@
         <div class="box">
             <h2><center>AWS Infrastructure<br>CLI Instructions:</center></h2>
             <center><a href="index.html">Return Home</a></center>
-            <p>In this lab we will be putting the finishing touches on some infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, EC2 instance, and S3 bucket.<br><br> We have already created a VPC (ID: <font class="ohigh">vpc-0ad7013d64ade7e5b</font>), a Security Group (ID: <font class="ohigh">sg-0d2334b053de7be66</font>), and a role for our EC2 instance (Name: <font class="ohigh">BootcampEc2Role</font>) but will complete the rest of our resources using the below instructions:</p>
+            <p>In this lab we will be putting the finishing touches on some infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, EC2 instance, and S3 bucket.<br><br><u>Please note:</u> If you have installed the AWS CLI using previous WGU instructions you will have created a profile named <em>bootcamp</em>. When using any below commands you must add <font class="ohigh">--profile bootcamp</font> to ensure you have proper permissions.<br><br> We have already created a VPC (ID: <font class="ohigh">vpc-0ad7013d64ade7e5b</font>), a Security Group (ID: <font class="ohigh">sg-0d2334b053de7be66</font>), and a role for our EC2 instance (Name: <font class="ohigh">BootcampEc2Role</font>) but will complete the rest of our resources using the below instructions:</p>
             <ol>
                 <li>Create your S3 bucket using the name <strong>"[FirstName]-[LabNumber]-clilab-s3"</strong></li><br>
                 <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-15-clilab-s3</box></p></div><br><br>
@@ -59,14 +59,10 @@
                 <div class="cli"><p>aws ec2 create-network-acl \ <br>&nbsp;--vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box></p></div>
                 <p>Copy the <strong>NetworkAclID</strong> from the return response.</p><br>
                 
-                <li>Block inbound & outbound traffic for your newly created NACL by utilizing the previously captured <strong>NetworkAclID</strong></li><br>
-                <div class="cli"><p>aws ec2 create-network-acl-entry \ <br>&nbsp;--network-acl-id <box class="ohigh">acl-0123...</box> \ <br>&nbsp;--ingress \ <br>&nbsp;--rule-number <box class="ohigh">100</box> \ <br>&nbsp;--protocol <box class="ohigh">-1</box> \ <br>&nbsp;--cidr-block <box class="ohigh">0.0.0.0/0</box> \ <br>&nbsp;--rule-action <box class="ohigh">deny</box></p></div><br>
-                <div class="cli"><p>aws ec2 create-network-acl-entry \ <br>&nbsp;--network-acl-id <box class="ohigh">acl-0123...</box> \ <br>&nbsp;--egress \ <br>&nbsp;--rule-number <box class="ohigh">100</box> \ <br>&nbsp;--protocol <box class="ohigh">-1</box> \ <br>&nbsp;--cidr-block <box class="ohigh">0.0.0.0/0</box> \ <br>&nbsp;--rule-action <box class="ohigh">deny</box></p></div><br><br>
-                
                 <li>Retrieve the Association ID of your newly created subnet</li><br>
-                <div class="cli"><p>aws ec2 describe-network-acls \ <br>&nbsp;--query 'NetworkAcls[*].Associations[?SubnetID==`<box class="ohigh">subnet-0123...</box>`]'</p></div>
-                <p>Copy the <strong>NetworkAclAssociationID</strong> from the return response.</p>
-                <p>Please note: You must surround the value of our query expression with the backtick (<strong>`</strong>) symbol.</p><br>
+                <div class="cli"><p>aws ec2 describe-network-acls \ <br>&nbsp;--query <box class="ohigh">'NetworkAcls[*].Associations[?SubnetId==`subnet-0123...`]'</box></p></div>
+                <p>Copy the <strong>NetworkAclAssociationID</strong> from the return response. If you are not receiving a result change your output to JSON via <font class="ohigh">--output json</font>.</p>
+                <p><u>Please note:</u> You must surround the value of our query expression with the backtick (<strong>`</strong>) symbol.</p><br>
                 
                 <li>Associate your newly created NACL with your newly created subnet</li><br>
                 <div class="cli"><p>aws ec2 replace-network-acl-association \ <br>&nbsp;--association-id <box class="ohigh">aclassoc-0123...</box> \ <br>&nbsp;--network-acl-id <box class="ohigh">acl-0123...</box></p></div><br><br>
@@ -74,7 +70,8 @@
                 <li>Create your EC2 instance by setting the AMI to <font class="ohigh">ami-01bbe152bf19d0289</font>, the instance type to <font class="ohigh">t2.micro</font>, and using some previously notated information</li><br>
                 <div class="cli"><p>aws ec2 run-instances \ <br>&nbsp;--image-id <box class="ohigh">ami-01bbe152bf19d0289</box> \ <br>&nbsp;--count <box class="ohigh">1</box> \ <br>&nbsp;--instance-type <box class="ohigh">t2.micro</box> \ <br>&nbsp;--iam-instance-profile Name=<box class="ohigh">BootcampEc2Role</box> \ <br>&nbsp;--security-group-ids <box class="ohigh">sg-0d2334b053de7be66</box> \ <br>&nbsp;--subnet-id <box class="ohigh">subnet-0123...</box></p></div><br>
             </ol>
-            <p>When you have completed these tasks your architecture can be diagrammed as:<br><br><img src="EC2Infrastructure.png" class="center"><br><br>Congratulations on completing your lab!</p>
+            <center>
+            <p>When you have completed these tasks your architecture can be diagrammed as:<br><br><img src="EC2Infrastructure.png" class="center"></p><h3>Congratulations on completing your lab!</h3></center>
             <a href='#top'>Back to Top</a>
         </div>
     </body>
