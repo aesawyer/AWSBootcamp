@@ -46,12 +46,13 @@
         <div class="box">
             <h2><center>AWS Infrastructure<br>CLI Instructions:</center></h2>
             <center><a href="index.html">Return Home</a></center>
-            <p>In this lab we will be putting the finishing touches on some infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, EC2 instance, and S3 bucket.<br><br><u>Please note:</u> If you have installed the AWS CLI using previous WGU instructions you will have created a profile named <em>bootcamp</em>. When using any below commands you must add <font class="ohigh">--profile bootcamp</font> to ensure you have proper permissions.<br><br> We have already created a VPC (ID: <font class="ohigh">vpc-0ad7013d64ade7e5b</font>), a Security Group (ID: <font class="ohigh">sg-0d2334b053de7be66</font>), and a role for our EC2 instance (Name: <font class="ohigh">BootcampEc2Role</font>) but will complete the rest of our resources using the below instructions:</p>
+            <p>In this lab we will be putting the finishing touches on some infrastructure. We want to have an EC2 instance that grabs the Amazon Resource Numbers (ARNs) for our VPC, subnet, EC2 instance, and S3 bucket.<br><br><u>Please note:</u> If you have installed the AWS CLI using previous WGU instructions you will have created a profile named <em>bootcamp</em>. When using any below commands you must add <font class="ohigh">--profile bootcamp</font> to ensure you have proper permissions.<br><br><center>Select the account you will be completing the lab in for IAM policy resources:<br/><small><em>(open in new tab or save .txt file)</em></small><br/><br/><a href="https://s3.amazonaws.com/bootcampclilab/InstructorAccount.txt">Instructor Provided Account</a><br/><br/><a href ="https://s3.amazonaws.com/bootcampclilab/RoleInfo.txt">Personal Account</a></center></p>
+            <hr>
             <ol>
-                <li>Create your S3 bucket using the name <strong>"[FirstName]-[LabNumber]-clilab-s3"</strong></li><br>
-                <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-15-clilab-s3</box></p></div><br><br>
+                <li>Create your S3 bucket using the name <strong>"[FirstName]-clilab-s3"</strong></li><br>
+                <div class="cli"><p>aws s3 mb <box class="ohigh">s3://adam-clilab-s3</box></p></div><br><br>
                 
-                <li>Create a subnet, setting the CIDR block to "172.31.[LabNumber].0/28"</li><br>
+                <li>Create a subnet, setting the CIDR block to "172.31.[InstructorAssignedNumber].0/28"</li><br>
                 <div class="cli"><p>aws ec2 create-subnet \ <br>&nbsp;--vpc-id <box class="ohigh">vpc-0ad7013d64ade7e5b</box> \ <br>&nbsp;--cidr-block <box class="ohigh">172.31.15.0/28</box></p></div>
                 <p>Copy the <strong>SubnetID</strong> from the return response.</p><br>
                 

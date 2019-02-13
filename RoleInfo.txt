@@ -1,0 +1,39 @@
+________________________________________________________________________
+|                          BootcampEc2Role                             |
+|______________________________________________________________________|
+|AWS Managed Policies | "AmazonS3ReadOnlyAccess"                       |
+
+________________________________________________________________________
+|                      BootcampLambdaRole                              |
+|______________________________________________________________________|
+|AWS Managed Policies    | "AmazonS3FullAccess"                        |
+|Customer Managed Policy | "BootcampLambdaRole"                        |
+|                        | [copy below JSON policy to IAM]             |
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:ListFunctions",
+                "lambda:GetEventSourceMapping",
+                "lambda:GetLayerVersion",
+                "lambda:ListVersionsByFunction",
+                "lambda:GetFunction",
+                "lambda:ListAliases",
+                "lambda:GetAccountSettings",
+                "lambda:GetFunctionConfiguration",
+                "lambda:GetLayerVersionPolicy",
+                "lambda:ListTags",
+                "lambda:ListEventSourceMappings",
+                "lambda:ListLayerVersions",
+                "lambda:ListLayers",
+                "lambda:GetAlias",
+                "lambda:GetPolicy"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
